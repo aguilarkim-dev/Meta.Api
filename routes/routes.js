@@ -1,5 +1,6 @@
 const express = require('express');
 const getCandleBySymbol = require('../handlers/getCandleBySymbol');
+const subscribePriceBySymbol = require('../handlers/subscribePriceBySymbol');
 const router = express.Router();
 
 router.get('/:symbol', async (req, res) => {
@@ -24,6 +25,29 @@ router.get('/:symbol', async (req, res) => {
 
     }
     
+});
+
+router.post('/subscribe', async (req, res) => {
+
+    try {
+        const token = req.headers['metaapi-token'];
+        const accountId = req.headers['metaapi-id'];
+        const { symbol, timeframe, interval } = req.body;
+
+        if(!timeframe){
+            throw "timeframe param is required!"
+        }
+
+        await subscribePriceBySymbol(req.io, token, accountId, symbol.toUpperCase(), timeframe, interval);
+        res.status(202).json({ status: "Subscribed! waiting for connections."});
+
+    } catch (error) {
+
+        const status = error.status ?? 500;
+        res.status(status).json(error);
+
+    }
+
 });
 
 module.exports = router;

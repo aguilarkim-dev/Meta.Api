@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Socket.IO</title>
+</head>
+<body>
+  <p id="symbol"></p>
+  <i id="price"></i>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    const symbol = document.getElementById("symbol");
+    const price = document.getElementById("price");
+    const socket = io();
+
+    socket.on("SILVER", (msg) => {
+      symbol.innerHTML = msg.symbol;
+      price.innerHTML = msg.close;
+    });
+
+  </script>
+</body>
+</html>
