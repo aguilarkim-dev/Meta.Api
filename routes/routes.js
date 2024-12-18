@@ -3,7 +3,7 @@ const getCandleBySymbol = require('../handlers/getCandleBySymbol');
 const subscribePriceBySymbol = require('../handlers/subscribePriceBySymbol');
 const router = express.Router();
 
-router.get('/:symbol', async (req, res) => {
+router.get('/:symbol', async (req, res, next) => {
 
     try {
         const token = req.headers['metaapi-token'];
@@ -20,14 +20,13 @@ router.get('/:symbol', async (req, res) => {
 
     } catch (error) {
 
-        const status = error.status ?? 500;
-        res.status(status).json(error);
+        next(error);
 
     }
     
 });
 
-router.post('/subscribe', async (req, res) => {
+router.post('/subscribe', async (req, res, next) => {
 
     try {
         const token = req.headers['metaapi-token'];
@@ -43,8 +42,7 @@ router.post('/subscribe', async (req, res) => {
 
     } catch (error) {
 
-        const status = error.status ?? 500;
-        res.status(status).json(error);
+        next(error);
 
     }
 

@@ -5,10 +5,17 @@ const { Server } = require("socket.io");
 const http = require('http');
 const path = require("path");
 const configureApiKey = require('./configureApiKey');
+const errorHandler = require('./errorHandler');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+    cors: {
+        origin: '*', // Your client's origin
+        methods: ['GET', 'POST'],
+    },
+}
+);
 
 const PORT = process.env.PORT || 3000;
 
@@ -30,6 +37,8 @@ io.on('connection', (socket) => {
     const { headers } = handshake;
     console.log({ id, host: headers.host });
 });
+
+app.use(errorHandler);
 
 server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

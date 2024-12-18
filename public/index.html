@@ -12,7 +12,7 @@
   <script>
     const symbol = document.getElementById("symbol");
     const price = document.getElementById("price");
-    const socket = io();
+    const socket = io("https://meta-api-luvj.onrender.com");
 
     socket.on("SILVER", (msg) => {
       symbol.innerHTML = msg.symbol;
